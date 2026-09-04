@@ -94,20 +94,20 @@ export async function renderCoverImage(root, category, headline, slug) {
 
   const textEls = lines
     .map((line, i) => {
-      // "IPTV" rendered in gold to match the brand's two-tone headline
+      // "IPTV" rendered in warm brass to match the wordmark treatment;
       // treatment; everything else in white.
       const parts = line.split(/(IPTV)/gi);
       const tspans = parts
         .map((part) => {
           if (!part) return "";
           const isIptv = /^iptv$/i.test(part);
-          return `<tspan fill="${isIptv ? "#facc15" : "#ffffff"}">${escapeXml(part)}</tspan>`;
+          return `<tspan fill="${isIptv ? "#dcbe8c" : "#ffffff"}">${escapeXml(part)}</tspan>`;
         })
         .join("");
       return (
         `<text x="50%" y="${startY + i * lineHeight}" xml:space="preserve" text-anchor="middle" ` +
         `font-family="Arial, sans-serif" font-weight="900" font-size="${fontSize}" ` +
-        `style="paint-order: stroke; stroke: #0a1628; stroke-width: 8px; stroke-linejoin: round;">${tspans}</text>`
+        `style="paint-order: stroke; stroke: #16241d; stroke-width: 8px; stroke-linejoin: round;">${tspans}</text>`
       );
     })
     .join("");
@@ -120,8 +120,8 @@ export async function renderCoverImage(root, category, headline, slug) {
   const svg =
     `<svg width="${W}" height="${OUT_H}" xmlns="http://www.w3.org/2000/svg">` +
     `<defs><linearGradient id="scrim" x1="0" y1="0" x2="0" y2="1">` +
-    `<stop offset="0%" stop-color="#0a1628" stop-opacity="0.85"/>` +
-    `<stop offset="100%" stop-color="#0a1628" stop-opacity="0"/>` +
+    `<stop offset="0%" stop-color="#16241d" stop-opacity="0.85"/>` +
+    `<stop offset="100%" stop-color="#16241d" stop-opacity="0"/>` +
     `</linearGradient></defs>` +
     `<rect x="0" y="0" width="${W}" height="${scrimHeight}" fill="url(#scrim)"/>` +
     textEls +

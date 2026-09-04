@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Sora, Inter } from "next/font/google";
+import { Manrope, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyWhatsApp from "@/components/StickyWhatsApp";
 import { SITE } from "@/lib/site";
 
-const sora = Sora({ subsets: ["latin"], variable: "--font-display", weight: ["600", "700", "800"] });
-const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-display", weight: ["600", "700", "800"] });
+const plex = IBM_Plex_Sans({ subsets: ["latin"], variable: "--font-body", weight: ["400", "500", "600"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -37,7 +37,7 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${sora.variable} ${inter.variable}`}>
+    <html lang="de" className={`${manrope.variable} ${plex.variable}`}>
       <body>
         <script
           type="application/ld+json"

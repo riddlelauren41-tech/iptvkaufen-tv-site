@@ -1,86 +1,106 @@
 import type { Metadata } from "next";
+import { ArrowRight } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
-import PricingCard from "@/components/PricingCard";
+import PricingMatrix from "@/components/PricingMatrix";
 import PaymentIcons from "@/components/PaymentIcons";
+import TrustStrip from "@/components/TrustStrip";
 import { pageMeta, whatsappUrl } from "@/lib/site";
-import { PLANS } from "@/lib/plans";
 
 export const metadata: Metadata = pageMeta({
-  title: "IPTV Österreich | IPTV Kaufen — Österreichische Sender in HD/4K",
+  title: "IPTV Österreich | IPTV Kaufen — ORF, ServusTV & ATV in HD/4K",
   description:
-    "IPTV Österreich bei IPTV Kaufen: alle österreichischen Sender (ORF 1, ORF 2, ServusTV, ATV) + 21.000+ internationale Kanäle in HD/4K. Sofort aktiv.",
+    "IPTV Österreich bei IPTV Kaufen: ORF 1, ORF 2, ServusTV, ATV und Puls 4 plus 21.000+ internationale Sender in HD/4K. Aktivierung in Minuten.",
   path: "/iptv-oesterreich",
 });
 
-const AT_CHANNELS = ["ORF 1", "ORF 2", "ServusTV", "ATV", "ATV2", "Puls 4", "ORF Sport+", "ProSieben Austria", "SAT.1 Österreich", "oe24.TV"];
+const GROUPS = [
+  { label: "ORF", channels: ["ORF 1", "ORF 2", "ORF III", "ORF Sport+"] },
+  { label: "Privatsender", channels: ["ServusTV", "ATV", "ATV2", "Puls 4", "oe24.TV"] },
+  { label: "Deutsche Fenster", channels: ["ProSieben Austria", "SAT.1 Österreich", "RTL Austria"] },
+  { label: "Schweiz dazu", channels: ["SRF 1", "SRF zwei", "SRF info"] },
+];
 
 export default function IptvOesterreichPage() {
   return (
     <>
-      <section className="dark-block section pb-16">
-        <div className="container-px text-center">
-          <span className="eyebrow text-sky">IPTV Österreich</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold max-w-3xl mx-auto">
-            IPTV Österreich — <span className="gradient-text">alle österreichischen Sender</span> in HD/4K
+      <section className="section pt-14 md:pt-20 pb-12">
+        <div className="container-px max-w-3xl">
+          <span className="eyebrow mb-6">IPTV Österreich</span>
+          <h1 className="text-[2.4rem] md:text-[3.1rem] font-extrabold leading-[1.08] mb-6">
+            ORF, ServusTV und ATV — <span className="marker">ohne Umweg</span>
           </h1>
-          <p className="muted text-lg mt-6 max-w-2xl mx-auto leading-relaxed">
-            ORF 1, ORF 2, ServusTV, ATV und mehr — zusammen mit 21.000+
-            internationalen Sendern in einem stabilen IPTV-Abonnement.
+          <p className="muted text-[1.05rem] leading-relaxed mb-8">
+            Die komplette österreichische Senderliste ist in jedem Abo enthalten,
+            zusammen mit dem deutschen Free-TV, der Schweiz und über 100 weiteren
+            Ländern. Kein Zusatzpaket, kein Aufpreis.
           </p>
-          <a href={whatsappUrl("Hallo, ich möchte mehr über IPTV in Österreich erfahren.")} target="_blank" rel="noopener noreferrer" className="btn-primary mt-8 inline-flex">
-            Über WhatsApp bestellen
+          <a href={whatsappUrl("Hallo, ich möchte mehr über IPTV in Österreich erfahren.")} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            Abo per WhatsApp starten
+            <ArrowRight size={17} strokeWidth={2} />
           </a>
         </div>
       </section>
 
-      <section className="section bg-white">
+      <TrustStrip />
+
+      <section className="section">
         <div className="container-px">
-          <SectionHeader eyebrow="Österreichische Sender" title="Alle großen österreichischen Sender inklusive" />
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {AT_CHANNELS.map((ch) => (
-              <span key={ch} className="card px-5 py-2.5 text-sm font-medium">{ch}</span>
+          <SectionHeader
+            eyebrow="Senderübersicht"
+            title="Österreichische Sender im Abo"
+            description="Alle in HD, viele zusätzlich in 4K, mit EPG und Replay bis zu sieben Tage rückwirkend."
+          />
+          <div className="grid gap-4 md:grid-cols-2 max-w-4xl mx-auto">
+            {GROUPS.map((g) => (
+              <div key={g.label} className="card p-6">
+                <h3 className="font-display font-extrabold text-base mb-4">{g.label}</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {g.channels.map((c) => (
+                    <span key={c} className="rounded border border-line bg-canvas px-2 py-1 text-[0.72rem] text-muted">
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section band-sand">
+        <div className="container-px">
+          <SectionHeader eyebrow="Preise" title="Dieselben Pakete, dieselben Preise" />
+          <PricingMatrix />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <PaymentIcons />
+            <span className="text-xs muted">Sichere Zahlung · Aktivierung in 5–15 Minuten</span>
           </div>
         </div>
       </section>
 
       <section className="section">
-        <div className="container-px">
-          <SectionHeader
-            eyebrow="Preise"
-            title="IPTV-Abonnement für Österreich"
-            description="Dieselbe stabile HD/4K-Qualität, ergänzt um die vollständige österreichische Senderliste."
-          />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {PLANS.map((plan) => (
-              <PricingCard key={plan.id} plan={plan} />
-            ))}
-          </div>
-          <div className="flex flex-col items-center gap-3 mt-10">
-            <p className="text-xs muted">Sicher bezahlen mit</p>
-            <PaymentIcons />
-          </div>
-        </div>
-      </section>
-
-      <section className="section bg-white">
-        <div className="container-px max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center">
-            Warum österreichische Zuschauer IPTV Kaufen wählen
+        <div className="container-px max-w-3xl">
+          <h2 className="text-[1.6rem] md:text-[1.95rem] font-extrabold leading-[1.2] mb-6">
+            Warum österreichische Zuschauer wechseln
           </h2>
-          <div className="heading-divider" />
-          <div className="space-y-4 text-sm leading-relaxed muted mt-8">
+          <div className="space-y-4 muted leading-relaxed">
             <p>
-              Neben allen deutschen und internationalen Sendern enthält
-              unser IPTV-Abo auch die vollständige österreichische
-              Senderliste: ORF 1, ORF 2, ServusTV, ATV und mehr. So verpasst
-              du kein einziges Spiel der österreichischen Bundesliga oder
-              deine liebste heimische Sendung.
+              Wer in Österreich wohnt oder von Deutschland aus österreichisches
+              Fernsehen sehen möchte, stößt schnell an Grenzen: Geoblocking bei
+              den Mediatheken, unvollständige Senderlisten bei Kabelanbietern,
+              oder ein Aufpreis für genau die vier Sender, die man eigentlich
+              sehen will.
             </p>
             <p>
-              Unsere Anti-Buffer-EU-Server liegen nah an Österreich, was für
-              eine stabile, schnelle Verbindung sorgt. Bestellung und
-              Aktivierung laufen über WhatsApp, mit Begleitung auf Deutsch.
+              Bei uns ist die österreichische Liste Teil des Standardpakets. Die
+              Bundesliga, Skispringen und der Weltcup laufen über ORF und
+              ServusTV genauso wie die deutschen Übertragungen — du entscheidest,
+              welchen Kommentar du hörst.
+            </p>
+            <p>
+              Unsere Server in Frankfurt und Amsterdam liegen nah genug an
+              Österreich, dass die Verbindung stabil bleibt. Bestellung,
+              Einrichtung und Support laufen auf Deutsch über WhatsApp.
             </p>
           </div>
         </div>

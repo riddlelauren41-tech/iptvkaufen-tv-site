@@ -7,10 +7,11 @@ export default function StickyWhatsApp() {
       href={whatsappUrl()}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat via WhatsApp"
-      className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/20 transition-transform hover:scale-105"
+      aria-label="Chat über WhatsApp"
+      className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-lg bg-forest px-4 py-3 text-sm font-display font-bold text-white shadow-[0_12px_32px_-12px_rgba(14,71,53,0.6)] transition-transform hover:-translate-y-0.5"
     >
-      <MessageCircle size={26} fill="white" strokeWidth={0} />
+      <MessageCircle size={18} strokeWidth={1.75} />
+      <span className="hidden sm:inline">WhatsApp</span>
     </a>
   );
 }

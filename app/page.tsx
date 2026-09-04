@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Tv, ShieldCheck, Zap, Headset, Trophy, Film, Star, BadgeCheck, Ban, Award, Rocket, Layers, PlayCircle, Smartphone, HelpCircle, CheckCircle2, Lock, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Check, Star, ArrowRight, Monitor, Smartphone, Tablet, Laptop, Cast } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
-import PricingCard from "@/components/PricingCard";
+import TrustStrip from "@/components/TrustStrip";
+import BentoFeatures from "@/components/BentoFeatures";
+import ChannelShowcase from "@/components/ChannelShowcase";
+import StepTimeline from "@/components/StepTimeline";
+import PricingMatrix from "@/components/PricingMatrix";
 import MultiScreenCard from "@/components/MultiScreenCard";
 import FaqAccordion from "@/components/FaqAccordion";
-import ComparisonTable from "@/components/ComparisonTable";
 import PaymentIcons from "@/components/PaymentIcons";
 import { pageMeta, whatsappUrl } from "@/lib/site";
-import { PLANS, MULTI_SCREEN_PLANS } from "@/lib/plans";
+import { PLANS, MULTI_SCREEN_PLANS, priceDE } from "@/lib/plans";
 
 export const metadata: Metadata = pageMeta({
   title: "IPTV Kaufen | Bester IPTV Anbieter Deutschland – HD/4K stabil & unbegrenzt",
@@ -17,423 +21,360 @@ export const metadata: Metadata = pageMeta({
   path: "/",
 });
 
-const APPS = ["IPTV Smarters Pro", "TiviMate", "XCIPTV", "IBO Player", "IWA Player"];
-
-const TRUST_STATS = [
-  { value: "30.500+", label: "Zufriedene Kunden" },
-  { value: "179.000+", label: "Sender" },
-  { value: "100.000+", label: "Filme & Serien" },
+const DEVICES = [
+  { icon: Monitor, label: "Smart TV", note: "Samsung, LG, Philips" },
+  { icon: Cast, label: "Streaming-Stick", note: "Fire TV, Chromecast, Apple TV" },
+  { icon: Smartphone, label: "Smartphone", note: "Android und iOS" },
+  { icon: Tablet, label: "Tablet", note: "iPad und Android-Tablets" },
+  { icon: Laptop, label: "PC & Mac", note: "Windows, macOS, VLC" },
 ];
 
-const TRUST_BADGES = [
-  { icon: Ban, label: "Keine versteckten Kosten" },
-  { icon: Award, label: "100% Geld-zurück-Garantie" },
-  { icon: Rocket, label: "Sofort aktiv in 5 Minuten" },
-];
-
-const BENEFITS = [
-  {
-    icon: Zap,
-    title: "4K / Full HD — stabile Streams",
-    desc: "Optimierte Anti-Buffer-EU-Server: Spiele, Filme und Serien ohne Unterbrechungen, minimale Verzögerung, zuverlässig bei jedem IPTV-Abo — auch bei Topspielen mit Tausenden gleichzeitigen Zuschauern.",
-  },
-  {
-    icon: Tv,
-    title: "Kompatibel mit allen Geräten",
-    desc: "Samsung/LG Smart TV, Android/Google TV, Fire TV, Apple TV, iOS/Android-Handy oder Tablet und PC/Mac (M3U & Xtream Codes). Ein Abo, jedes Gerät, das du bereits zu Hause hast.",
-  },
-  {
-    icon: Headset,
-    title: "WhatsApp-Support 24/7",
-    desc: "Einfache Installationsanleitungen plus direkte persönliche Hilfe, von deiner ersten Frage bis zur vollständigen Aktivierung deines Premium-IPTV. Keine Wartezeiten, keine Ticket-Systeme.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "7 Tage Geld-zurück-Garantie",
-    desc: "Sichere Bezahlung, deine Privatsphäre wird vollständig respektiert, und du kannst erst testen, bevor du dich endgültig für dein IPTV-Abo entscheidest. Nicht zufrieden? Geld zurück, ganz ohne Aufwand.",
-  },
-  {
-    icon: Trophy,
-    title: "IPTV unbegrenzt & flexibel",
-    desc: "Klare Angebote ohne versteckte Kosten, vollständiger VOD- & Replay-Zugang und automatische Senderupdates für IPTV Deutschland. Keine langen Verträge, kein Kleingedrucktes.",
-  },
-  {
-    icon: Film,
-    title: "Sport, Filme & Serien",
-    desc: "Deutsche und internationale Sender, eine umfangreiche VOD-Bibliothek in 4K/HD, und die großen Sportevents live — Bundesliga, Champions League und Formel 1, wöchentlich aktualisiert.",
-  },
-];
-
-const TRUST_PILLS = [
-  { icon: Lock, label: "Sichere Bezahlung" },
-  { icon: Zap, label: "Aktivierung 5-15 Min" },
-  { icon: Star, label: "HD/4K Qualität" },
-  { icon: Headset, label: "WhatsApp 24/7" },
-  { icon: Sparkles, label: "Fokus auf Deutschland" },
-];
-
-const STEPS = [
-  {
-    step: "1",
-    title: "Wähle dein Angebot",
-    desc: "Wähle die Laufzeit oder die Anzahl der Bildschirme, die zu dir passt.",
-    bullets: ["Ohne Verpflichtungen", "Sofortige Aktivierung", "Deutscher Support"],
-  },
-  {
-    step: "2",
-    title: "Installiere die IPTV-App",
-    desc: "Erhalte deine Zugangsdaten und richte deine Anwendung ein.",
-    bullets: ["Smart TV, Android, iOS, PC", "Anleitungen inklusive", "Stabiles HD/4K-Streaming"],
-  },
-  {
-    step: "3",
-    title: "Genieße ohne Limit",
-    desc: "Zugriff auf all deine Lieblingssender, Filme und Sport.",
-    bullets: ["Sender & VOD unbegrenzt", "Live-Sport", "Premium-Qualität"],
-  },
-];
-
-const VOD_FEATURES = [
-  { icon: Layers, title: "Klare Kategorien", desc: "Finde schnell, was du sehen möchtest, dank einer einfachen und übersichtlichen Navigation." },
-  { icon: PlayCircle, title: "Flüssige Wiedergabe", desc: "Ein stabiles Erlebnis mit HD/4K-Qualität, unabhängig von deinem Gerät und deiner Verbindung." },
-  { icon: Smartphone, title: "Multi-Geräte", desc: "Kompatibel mit Smart TV, Android, iOS, PC — und Hilfe bei Bedarf." },
-];
+const APPS = ["IPTV Smarters Pro", "TiviMate", "XCIPTV", "IBO Player", "GSE Smart IPTV"];
 
 const TESTIMONIALS = [
-  { name: "Lukas M.", city: "Berlin", text: "Schnelle Aktivierung, das Bild ist super stabil. Die deutschen Sender sind vollständig und es ruckelt nie." },
-  { name: "Sophie B.", city: "München", text: "WhatsApp-Support sehr reaktionsschnell. Ich hatte den Zugang innerhalb weniger Minuten. Top auf Smart TV." },
-  { name: "Thomas D.", city: "Hamburg", text: "VOD + Sport + internationale Sender. Ich wollte etwas Premium und bin zufrieden." },
-  { name: "Emma L.", city: "Köln", text: "Funktioniert perfekt auf meinem Fire Stick und Handy gleichzeitig. Bisher keine einzige Störung." },
+  {
+    name: "Lukas M.",
+    city: "Berlin",
+    text: "Ich hatte vorher zwei andere Anbieter und beide sind sonntags zum Topspiel eingebrochen. Hier läuft es seit acht Monaten durch, auch an Champions-League-Abenden.",
+  },
+  {
+    name: "Sophie B.",
+    city: "München",
+    text: "Was mich überzeugt hat, war der Support. Ich habe abends um halb elf geschrieben und hatte zehn Minuten später alles auf dem Fire Stick laufen.",
+  },
+  {
+    name: "Thomas D.",
+    city: "Hamburg",
+    text: "Die ORF- und SRF-Sender waren für uns wichtig, weil meine Frau aus Wien kommt. Alles da, alles in HD, keine Diskussion.",
+  },
+  {
+    name: "Emma L.",
+    city: "Köln",
+    text: "Drei Bildschirme gleichzeitig, ohne dass etwas ruckelt. Die Kinder streamen im Kinderzimmer, ich schaue Bundesliga im Wohnzimmer.",
+  },
 ];
 
 const FAQS = [
   {
-    question: "Wie lange dauert es, mein IPTV-Abo zu aktivieren?",
+    question: "Wie lange dauert es, bis mein IPTV-Abo aktiv ist?",
     answer:
-      "Nach der Bestellung erfolgt die Aktivierung in der Regel innerhalb von 5 bis 15 Minuten, sodass du fast sofort mit dem Schauen beginnen kannst. Du erhältst deine persönlichen Zugangsdaten und eine klare Installationsanleitung über WhatsApp, abgestimmt auf das Gerät, das du verwendest. Sollte während der Installation etwas schiefgehen, steht dir unser Support-Team sofort zur Verfügung, um dir Schritt für Schritt zu helfen. So musst du nie lange warten, bevor du Zugriff auf alle Sender und die vollständige VOD-Bibliothek hast.",
+      "In der Regel zwischen 5 und 15 Minuten nach der Bestellung. Du erhältst deine persönlichen Zugangsdaten und eine Installationsanleitung über WhatsApp, abgestimmt auf das Gerät, das du nutzt. Falls bei der Einrichtung etwas nicht klappt, geht unser Support die Schritte direkt mit dir durch. Du wartest also nie lange, bis du auf alle Sender und die komplette VOD-Bibliothek zugreifen kannst.",
   },
   {
     question: "Wie installiere ich die App auf meinem Smart TV oder Fire Stick?",
     answer:
-      "Wir schicken dir eine klare, schrittweise Installationsanleitung, die speziell auf dein Gerät abgestimmt ist. Für Smart TVs (Samsung, LG) und Fire Stick empfehlen wir die App IPTV Smarters Pro oder TiviMate, beide einfach über den jeweiligen App Store herunterzuladen. Unser WhatsApp-Support begleitet dich live, vom Herunterladen der App bis zur Eingabe deiner Zugangsdaten, bis alles perfekt funktioniert. Die gesamte Installation dauert in der Regel nicht länger als ein paar Minuten, auch wenn du noch nie mit IPTV gearbeitet hast.",
+      "Wir schicken dir eine Schritt-für-Schritt-Anleitung, die genau zu deinem Gerät passt. Für Samsung- und LG-Fernseher sowie den Fire TV Stick empfehlen wir IPTV Smarters Pro oder TiviMate — beide lassen sich direkt über den jeweiligen App Store installieren. Unser WhatsApp-Support begleitet dich live vom Download bis zur Eingabe der Zugangsdaten. Die komplette Einrichtung dauert meist nur wenige Minuten, auch wenn du vorher noch nie IPTV genutzt hast.",
   },
   {
     question: "Welche Geräte sind kompatibel?",
     answer:
-      "IPTV Kaufen funktioniert auf nahezu jedem Gerät mit Internetverbindung: Smart TVs von Samsung und LG, Android TV und Google TV, Fire TV Stick, Android- und iOS-Handys oder Tablets, PC und Mac sowie MAG- und Formuler-Boxen. Für das beste Erlebnis empfehlen wir Apps wie TiviMate, IPTV Smarters Pro oder XCIPTV, je nach Gerät und persönlicher Vorliebe. Hast du mehrere Geräte zu Hause, kannst du mit einem Mehrbildschirm-Abo auf verschiedenen Bildschirmen gleichzeitig schauen. Bist du dir unsicher, welche Kombination am besten zu deiner Situation passt, beraten wir dich gerne persönlich über WhatsApp.",
+      "IPTV Kaufen läuft auf praktisch jedem Gerät mit Internetverbindung: Smart TVs von Samsung, LG und Philips, Android TV und Google TV, Fire TV Stick, Apple TV, Android- und iOS-Geräte, PC und Mac sowie MAG- und Formuler-Boxen. Je nach Gerät empfehlen wir TiviMate, IPTV Smarters Pro oder XCIPTV als Player. Mit einem Mehrbildschirm-Paket kannst du auf mehreren Geräten gleichzeitig schauen. Wenn du unsicher bist, welche Kombination für dich passt, beraten wir dich vorher per WhatsApp.",
   },
   {
     question: "Welche Zahlungsmethoden akzeptiert ihr?",
     answer:
-      "Wir akzeptieren die gängigsten und sichersten Zahlungsmethoden in Deutschland: Visa, Mastercard, PayPal und Sofortüberweisung. Jede Zahlung läuft über eine gesicherte Verbindung, sodass deine Daten immer gut geschützt sind. Sobald deine Zahlung bestätigt ist, erhältst du automatisch eine Bestätigung über WhatsApp mit den nächsten Schritten zur Aktivierung. Bevorzugst du eine andere Zahlungsmethode, melde dich gerne bei uns — wir besprechen die Möglichkeiten.",
+      "Wir akzeptieren PayPal, SEPA-Überweisung, Sofortüberweisung sowie Visa und Mastercard. Jede Zahlung läuft über eine gesicherte Verbindung, deine Daten bleiben geschützt. Nach Zahlungseingang bekommst du eine Bestätigung über WhatsApp mit den nächsten Schritten zur Aktivierung. Wenn du eine andere Zahlungsmethode bevorzugst, sprich uns einfach an.",
   },
   {
     question: "Gibt es eine Geld-zurück-Garantie?",
     answer:
-      "Ja, wir bieten eine 7-tägige Geld-zurück-Garantie auf jedes Abo, das du bei uns abschließt. Bist du innerhalb dieser Zeit nicht vollständig zufrieden mit der Stabilität, Qualität oder dem Angebot, bekommst du dein Geld zurück, ohne komplizierte Bedingungen. Wir bitten dich nur, eventuelle Probleme zunächst mit unserem Support-Team über WhatsApp zu teilen, damit wir versuchen können, diese direkt zu beheben. So kannst du IPTV Kaufen völlig risikofrei ausprobieren, mit der Sicherheit, dass du an nichts gebunden bist.",
+      "Ja, auf jedes Paket gilt eine Geld-zurück-Garantie von 7 Tagen. Wenn du in dieser Zeit mit Stabilität, Bildqualität oder Senderauswahl nicht zufrieden bist, bekommst du dein Geld zurück — ohne komplizierte Bedingungen. Wir bitten dich lediglich, Probleme vorher kurz mit unserem Support zu teilen, damit wir sie direkt beheben können. So kannst du IPTV Kaufen ohne Risiko testen.",
+  },
+  {
+    question: "Läuft das Abo automatisch weiter?",
+    answer:
+      "Nein. Es gibt keine automatische Verlängerung und keine stillschweigende Vertragsbindung. Du buchst eine feste Laufzeit — 3, 6, 12 oder 24 Monate — und entscheidest am Ende selbst, ob du verlängern möchtest. Wir erinnern dich rechtzeitig per WhatsApp, aber es wird nichts ohne deine Zustimmung abgebucht.",
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="dark-block relative overflow-hidden">
-        <Image src="/img/hero-bg.jpg" alt="" fill priority className="object-cover object-center opacity-90" />
-        <div className="absolute inset-0 bg-linear-to-r from-navy via-navy/85 to-navy/40" />
-        <div className="container-px relative pt-16 pb-24 md:pt-20 md:pb-32 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-4 py-1.5 text-xs font-semibold text-orange mb-6">
-            <span className="h-1.5 w-1.5 rounded-full bg-orange" />
-            Exklusives Angebot heute – sofortige Aktivierung
-          </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight max-w-4xl mx-auto">
-            Bestes <span className="gradient-text">IPTV Deutschland</span> — HD/4K stabil & unbegrenzt
-          </h1>
-          <p className="text-white/85 text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed">
-            IPTV Kaufen liefert stabiles deutsches IPTV in 4K-Qualität, ohne
-            Pufferung und ohne Unterbrechungen — auch an vollen Sportabenden.
-            Nach der Bestellung wird dein Abo innerhalb weniger Minuten
-            aktiviert, mit klaren Installationsanweisungen und persönlicher
-            Begleitung über WhatsApp. So schaust du noch heute Abend deine
-            Lieblingssender, Filme und Serien, auf jedem Gerät, das du bereits
-            zu Hause hast.
-          </p>
-          <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              Über WhatsApp bestellen
-            </a>
-            <a href="#preise" className="btn-ghost">
-              Preise ansehen
-            </a>
-          </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-            {TRUST_BADGES.map((b) => (
-              <span key={b.label} className="inline-flex items-center gap-2 text-sm text-white/80">
-                <b.icon size={16} className="text-orange" />
-                {b.label}
+      {/* Hero: asymmetric, copy left / device card right */}
+      <section className="section pt-14 md:pt-20 pb-14 md:pb-20">
+        <div className="container-px grid lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-16 items-center">
+          <div>
+            <span className="eyebrow mb-6">IPTV Abo für Deutschland</span>
+            <h1 className="text-[2.5rem] md:text-[3.4rem] font-extrabold leading-[1.05] mb-6">
+              Deutsches Fernsehen,{" "}
+              <br className="hidden md:block" />
+              <span className="marker">ohne Kabel</span> und ohne{" "}
+              <br className="hidden md:block" />
+              Vertragsbindung.
+            </h1>
+            <p className="muted text-[1.05rem] leading-relaxed max-w-xl mb-8">
+              21.000 Sender und 63.000 Filme und Serien in HD und 4K — auf dem
+              Fernseher, den du schon hast. Bestellung und Einrichtung laufen
+              über WhatsApp, meist bist du in einer Viertelstunde auf Sendung.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                Abo per WhatsApp starten
+                <ArrowRight size={17} strokeWidth={2} />
+              </a>
+              <Link href="#preise" className="btn-secondary">
+                Preise vergleichen
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 text-sm">
+              <span className="inline-flex items-center gap-2 muted">
+                <Check size={15} strokeWidth={2.5} className="text-forest" /> Ab {priceDE(PLANS[0].price)}
               </span>
-            ))}
+              <span className="inline-flex items-center gap-2 muted">
+                <Check size={15} strokeWidth={2.5} className="text-forest" /> 7 Tage Geld zurück
+              </span>
+              <span className="inline-flex items-center gap-2 muted">
+                <Check size={15} strokeWidth={2.5} className="text-forest" /> Keine Verlängerung
+              </span>
+            </div>
           </div>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-            {TRUST_STATS.map((s) => (
-              <div key={s.label} className="text-center">
-                <p className="font-display font-extrabold text-2xl md:text-3xl gradient-text">{s.value}</p>
-                <p className="text-white/70 text-xs mt-1">{s.label}</p>
+
+          {/* Floating device card -- the one raised element on the page. */}
+          <div className="raised overflow-hidden">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src="/img/hero-tv.jpg"
+                alt="Wohnzimmer mit Fernseher, auf dem Live-Fußball läuft"
+                fill
+                priority
+                className="object-cover"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-4 px-5 py-4 border-t border-line">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-forest opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-forest" />
+                </span>
+                <span className="text-xs font-medium">Jetzt live</span>
               </div>
-            ))}
+              <div className="flex items-center gap-1.5 overflow-hidden">
+                {["Bundesliga", "Formel 1", "ORF 1", "Sky"].map((c) => (
+                  <span key={c} className="rounded border border-line px-2 py-0.5 text-[0.68rem] text-muted whitespace-nowrap">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Apps & Support */}
+      <TrustStrip />
+
+      {/* Bento value grid */}
       <section className="section">
         <div className="container-px">
           <SectionHeader
-            eyebrow="Kompatibilität"
-            title="IPTV Abonnement — kompatibel mit deinen Lieblingsapps"
-            description="Läuft auf Smart TV, Android, iOS und Fire Stick — nutze die App, die du schon kennst."
+            eyebrow="Warum IPTV Kaufen"
+            title={<>Ein Abo, das im Alltag <span className="marker">tatsächlich hält</span></>}
+            description="Die meisten IPTV-Angebote sehen auf dem Papier gleich aus. Der Unterschied zeigt sich, wenn viele gleichzeitig einschalten — und wenn etwas nicht funktioniert."
           />
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {APPS.map((app) => (
-              <span key={app} className="card px-5 py-2.5 text-sm font-medium">{app}</span>
-            ))}
-          </div>
+          <BentoFeatures />
         </div>
       </section>
 
-      {/* Key Features */}
-      <section className="section bg-white">
+      {/* Channel showcase -- new section, German-market specific */}
+      <section className="section band-sand">
         <div className="container-px">
-          <div className="text-center max-w-2xl mx-auto mb-4">
-            <span className="eyebrow">Vorteile</span>
-            <h2 className="text-3xl md:text-4xl font-bold">
-              <span className="block">IPTV Abonnement —</span>
-              <span className="inline bg-orange/90 text-white px-3 py-1 my-1.5 rounded-md box-decoration-clone">
-                Vorteile des besten IPTV
-              </span>
-              <span className="block">in Deutschland</span>
-            </h2>
-            <div className="heading-divider" />
-            <p className="muted mt-5 text-lg leading-relaxed">
-              Mit unserem <span className="text-blue underline">IPTV Abonnement</span> speziell für IPTV
-              Deutschland genießt du Premium-IPTV, das stabil und unbegrenzt ist: HD/4K-Qualität, eine
-              riesige VOD-Sammlung, Live-Sport und 24/7-Support. Kompatibel mit Smart TV, Android,
-              iOS, Box &amp; PC — ganz ohne Verpflichtungen.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12">
-            {TRUST_PILLS.map((p) => (
-              <span key={p.label} className="inline-flex items-center gap-1.5 rounded-full bg-navy text-white px-3.5 py-1.5 text-xs font-medium">
-                <p.icon size={13} className="text-orange" /> {p.label}
-              </span>
-            ))}
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {BENEFITS.map((b) => (
-              <div key={b.title} className="rounded-2xl bg-navy p-6">
-                <div className="flex items-start gap-2.5 mb-2">
-                  <CheckCircle2 size={20} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <h3 className="font-semibold text-white">{b.title}</h3>
-                </div>
-                <p className="text-white/70 text-sm leading-relaxed pl-7">{b.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <a href="#preise" className="btn-primary inline-flex items-center gap-2">
-              <Rocket size={16} /> Heute starten — Preise ansehen →
-            </a>
-          </div>
+          <SectionHeader
+            eyebrow="Senderübersicht"
+            title="Was du damit sehen kannst"
+            description="Von der Bundesliga über das komplette deutsche Free-TV bis zu ORF, SRF und über 100 internationalen Ländern."
+          />
+          <ChannelShowcase />
         </div>
       </section>
 
-      {/* Single Pricing */}
-      <section id="preise" className="section">
+      {/* How it works */}
+      <section className="section">
+        <div className="container-px">
+          <SectionHeader eyebrow="Ablauf" title="In drei Schritten auf Sendung" />
+          <StepTimeline />
+        </div>
+      </section>
+
+      {/* Pricing matrix */}
+      <section id="preise" className="section band-sand">
         <div className="container-px">
           <SectionHeader
             eyebrow="Preise"
-            title="Wähle dein IPTV Abonnement — IPTV Deutschland"
-            description="Wähle das Paket, das zu dir passt, und genieße ein stabiles IPTV-Abo in HD/4K, mit WhatsApp-Support 7/7 und 7 Tage Geld-zurück-Garantie."
+            title="Alle Pakete im direkten Vergleich"
+            description="Jedes Paket enthält dieselbe Senderliste und dieselbe VOD-Bibliothek. Unterschiedlich sind nur Laufzeit, Bildschirme und der Preis pro Monat."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {PLANS.map((plan) => (
-              <PricingCard key={plan.id} plan={plan} />
-            ))}
-          </div>
-          <div className="flex flex-col items-center gap-3 mt-10">
-            <p className="text-xs muted">Sicher bezahlen mit</p>
+          <PricingMatrix />
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
             <PaymentIcons />
+            <span className="text-xs muted">Sichere Zahlung · Aktivierung in 5–15 Minuten</span>
+          </div>
+
+          <div className="mt-20">
+            <SectionHeader
+              eyebrow="Mehrere Bildschirme"
+              title="Für Haushalte, die gleichzeitig schauen"
+              description="Wenn im Wohnzimmer Fußball läuft und im Kinderzimmer eine Serie — hier zählt die Anzahl der Bildschirme, nicht die Laufzeit."
+            />
+            <div className="grid gap-4 md:grid-cols-3 max-w-4xl mx-auto">
+              {MULTI_SCREEN_PLANS.map((plan) => (
+                <MultiScreenCard key={plan.id} plan={plan} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Multi Pricing */}
-      <section className="section bg-white">
-        <div className="container-px">
-          <SectionHeader
-            eyebrow="Mehrere Bildschirme"
-            title="IPTV Mehrbildschirm-Abonnements"
-            description="Schau mit der ganzen Familie gleichzeitig, jeder auf einem anderen Gerät — günstige Tarife pro zusätzlichem Bildschirm."
-          />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {MULTI_SCREEN_PLANS.map((plan) => (
-              <MultiScreenCard key={plan.id} plan={plan} />
-            ))}
+      {/* Devices + apps, two-column */}
+      <section className="section">
+        <div className="container-px grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <div>
+            <span className="eyebrow mb-5">Kompatibilität</span>
+            <h2 className="text-[1.85rem] md:text-[2.2rem] font-extrabold leading-[1.15] mb-5">
+              Du brauchst keine neue Hardware
+            </h2>
+            <p className="muted leading-relaxed mb-6">
+              IPTV läuft über deine normale Internetverbindung. Kein Receiver,
+              keine Schüssel, kein Techniker-Termin. Du installierst eine App auf
+              dem Gerät, das ohnehin im Wohnzimmer steht, trägst deine
+              Zugangsdaten ein und schaust los.
+            </p>
+            <p className="muted leading-relaxed mb-8">
+              Wir unterstützen alle gängigen Player. Wenn du bereits eine App
+              gewohnt bist, kannst du sie weiter nutzen — die Zugangsdaten
+              funktionieren mit jeder davon.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {APPS.map((a) => (
+                <span key={a} className="rounded-md border border-line bg-surface px-3 py-1.5 text-xs text-muted">
+                  {a}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* How It Works */}
-      <section className="dark-block section">
-        <div className="container-px">
-          <SectionHeader
-            eyebrow="Loslegen"
-            title="So funktioniert IPTV Abonnement — einfach, schnell & unbegrenzt"
-          />
-          <p className="text-white/80 text-center max-w-2xl mx-auto -mt-6 mb-12 leading-relaxed">
-            Mit <strong className="text-white">IPTV Abonnement</strong> genießt du{" "}
-            <strong className="text-white">das beste IPTV in Deutschland</strong>: schnelle Installation,
-            HD/4K-Qualität, unbegrenztes VOD und 24/7-Support.
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {STEPS.map((s) => (
-              <div key={s.step} className="card p-7">
-                <div className="h-14 w-14 rounded-full bg-linear-to-br from-orange-2 to-orange text-white font-display font-bold text-xl flex items-center justify-center mb-5">
-                  {s.step}
+          <div className="divide-y divide-line border-y border-line">
+            {DEVICES.map((d) => (
+              <div key={d.label} className="flex items-center gap-4 py-4">
+                <d.icon size={20} strokeWidth={1.5} className="text-forest shrink-0" />
+                <div className="flex-1">
+                  <p className="font-display font-bold text-[0.95rem]">{d.label}</p>
+                  <p className="text-xs muted mt-0.5">{d.note}</p>
                 </div>
-                <h3 className="font-semibold text-lg mb-2">{s.title}</h3>
-                <p className="text-white/75 text-sm leading-relaxed mb-4">{s.desc}</p>
-                <ul className="space-y-2">
-                  {s.bullets.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-sm text-white/85">
-                      <span className="text-orange">✔</span> {b}
-                    </li>
-                  ))}
-                </ul>
+                <Check size={16} strokeWidth={2} className="text-forest shrink-0" />
               </div>
             ))}
           </div>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-            <a href="#preise" className="btn-ghost">
-              ⚡ Preise ansehen
-            </a>
-            <a href="/faq" className="btn-ghost inline-flex items-center gap-2">
-              <HelpCircle size={16} className="text-orange" /> FAQ
-            </a>
+        </div>
+      </section>
+
+      {/* SEO block: sport -- offset photo left */}
+      <section className="section band-sand">
+        <div className="container-px grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-line order-2 lg:order-1">
+            <Image
+              src="/img/sport.jpg"
+              alt="Fußballstadion bei Flutlicht während eines Abendspiels"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="order-1 lg:order-2">
+            <span className="eyebrow mb-5">Sport</span>
+            <h2 className="text-[1.85rem] md:text-[2.2rem] font-extrabold leading-[1.15] mb-5">
+              Bundesliga, Champions League und Formel 1 — live
+            </h2>
+            <div className="space-y-4 muted leading-relaxed text-[0.97rem]">
+              <p>
+                Sport ist der Grund, aus dem die meisten Kunden zu uns wechseln,
+                und gleichzeitig der härteste Test für jeden Anbieter. Wenn zum
+                Anpfiff eines Topspiels Zehntausende gleichzeitig einschalten,
+                trennt sich ein stabiler Dienst von einem billigen.
+              </p>
+              <p>
+                Unsere Server stehen in Frankfurt und Amsterdam und sind auf
+                genau diese Lastspitzen ausgelegt. Der Stream bleibt flüssig und
+                läuft ohne nennenswerten Versatz zur Live-Übertragung — wichtig,
+                wenn die Nachbarn beim Tor jubeln, bevor du es siehst.
+              </p>
+              <p>
+                Neben den großen deutschen und europäischen Wettbewerben bekommst
+                du internationale Sportsender: Tennis, Boxen, Motorsport,
+                Wintersport und Ligen, die im deutschen Free-TV gar nicht laufen.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mt-7 pt-6 border-t border-line text-sm muted">
+              <span>Bundesliga &amp; 2. Liga</span>
+              <span>DFB-Pokal</span>
+              <span>Champions League</span>
+              <span>Formel 1</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Comparison */}
-      <section className="section bg-white">
-        <div className="container-px">
-          <SectionHeader eyebrow="Vergleich" title="Warum uns wählen?" />
-          <ComparisonTable />
-        </div>
-      </section>
-
-      {/* SEO Content: Sport (full-width dark band) */}
-      <section className="dark-block section">
-        <div className="container-px text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold">Das Beste vom Fußball — IPTV Abonnement</h2>
-          <div className="heading-divider" />
-          <p className="text-white/85 leading-relaxed mt-6 text-left md:text-center">
-            Bei IPTV Kaufen musst du nie einen Moment deines Lieblingssports
-            verpassen. Verfolge jeden Spieltag der Bundesliga, die Spannung
-            der Champions League und die Geschwindigkeit der Formel 1, alles
-            live und in messerscharfer HD/4K-Qualität. Unsere Anti-Buffer-EU-
-            Server sind speziell für Spitzenzeiten optimiert: Auch wenn sich
-            Tausende Zuschauer gleichzeitig bei einem entscheidenden Spiel
-            einloggen, bleibt der Stream flüssig und ohne Verzögerung
-            gegenüber der Live-Übertragung. Keine eingefrorenen Bilder im
-            entscheidenden Moment, keine störende Pufferung kurz vor einem
-            Tor — genau dann, wenn es am meisten zählt. Neben den großen
-            deutschen und europäischen Ligen hast du auch Zugriff auf
-            internationale Sportsender, von Tennis über Rugby bis Boxen und
-            Motorsport. Alles ist auf jedem Gerät verfügbar, das du bereits
-            zu Hause hast, vom Smart TV bis zum Smartphone, sodass du nie an
-            einen Bildschirm gebunden bist. Mit IPTV Kaufen verbindest du die
-            Zuverlässigkeit eines Premium-Abos mit der Flexibilität, überall
-            zu schauen, wo und wann du willst.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8 text-sm text-white/75">
-            <span>Stabiles Streaming</span>
-            <span className="text-orange">•</span>
-            <span>HD/4K Qualität</span>
-            <span className="text-orange">•</span>
-            <span>WhatsApp Support 24/7</span>
+      {/* SEO block: VOD -- mirrored */}
+      <section className="section">
+        <div className="container-px grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div>
+            <span className="eyebrow mb-5">Filme &amp; Serien</span>
+            <h2 className="text-[1.85rem] md:text-[2.2rem] font-extrabold leading-[1.15] mb-5">
+              63.000 Titel auf Abruf, in HD und 4K
+            </h2>
+            <div className="space-y-4 muted leading-relaxed text-[0.97rem]">
+              <p>
+                Neben dem Live-Programm gehört eine vollständige Mediathek zum
+                Abo. Blockbuster, aktuelle Serienstaffeln, Klassiker und
+                Dokumentationen — sortiert in klare Kategorien, damit du nicht
+                zwanzig Minuten durch Listen scrollst, um etwas zu finden.
+              </p>
+              <p>
+                Der Katalog wächst wöchentlich. Neue Kinofilme kommen laufend
+                dazu, ebenso neue Folgen laufender Serien, jeweils mit deutscher
+                Tonspur und, wo verfügbar, im Original mit Untertiteln.
+              </p>
+              <p>
+                Der integrierte EPG zeigt dir das Programm der nächsten Tage über
+                alle Sender hinweg, und mit Replay holst du Sendungen nach, die
+                du verpasst hast — bis zu sieben Tage rückwirkend.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mt-7 pt-6 border-t border-line text-sm muted">
+              <span>Wöchentliche Updates</span>
+              <span>Deutscher Ton</span>
+              <span>EPG &amp; Replay</span>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* SEO Content: VOD (full-width light band) */}
-      <section className="section bg-white">
-        <div className="container-px text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold">VOD in HD/4K — IPTV Abonnement (IPTV Deutschland)</h2>
-          <div className="heading-divider" />
-          <p className="muted leading-relaxed mt-6 text-left md:text-center">
-            Neben Live-TV bietet IPTV Kaufen eine umfangreiche VOD-Bibliothek
-            mit Tausenden Filmen und Serien in Full-HD- und 4K-Qualität. Unser
-            Katalog wird täglich um die neuesten Veröffentlichungen erweitert,
-            von großen Blockbustern über beliebte Serien bis hin zu
-            Dokumentationen, sodass es immer etwas Neues zu entdecken gibt.
-            Dank des integrierten EPG (elektronischer TV-Guide) siehst du auf
-            einen Blick genau, was jetzt und in den nächsten Tagen auf jedem
-            Sender läuft — praktisch, um nie wieder eine Lieblingssendung zu
-            verpassen. Alles ist in klare, übersichtliche Kategorien
-            unterteilt, sodass du innerhalb von Sekunden findest, wonach du
-            suchst, ohne endlos zu scrollen. Das Wiedergabeerlebnis ist auf
-            eine flüssige Darstellung optimiert, unabhängig von deinem Gerät
-            oder deiner Verbindung. Egal, ob du auf einem Smart TV, Tablet,
-            Handy oder PC schaust: Die Qualität bleibt durchgehend hoch.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-5 mt-10">
-            {VOD_FEATURES.map((f) => (
-              <div key={f.title} className="card p-6 text-left">
-                <div className="h-10 w-10 rounded-lg bg-linear-to-br from-navy to-blue flex items-center justify-center mb-3">
-                  <f.icon size={18} className="text-white" />
-                </div>
-                <h3 className="font-semibold text-sm mb-1.5">{f.title}</h3>
-                <p className="muted text-sm leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-orange/10 text-orange px-3.5 py-1.5 text-xs font-semibold">
-              <span className="h-1.5 w-1.5 rounded-full bg-orange" /> Einfacher Zugang
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-orange/10 text-orange px-3.5 py-1.5 text-xs font-semibold">
-              <span className="h-1.5 w-1.5 rounded-full bg-orange" /> Deutscher Support
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-orange/10 text-orange px-3.5 py-1.5 text-xs font-semibold">
-              <span className="h-1.5 w-1.5 rounded-full bg-orange" /> Begleiteter Start
-            </span>
+          <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-line">
+            <Image
+              src="/img/vod.jpg"
+              alt="Person, die zu Hause entspannt eine Serie auf dem Fernseher schaut"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
 
       {/* Reviews */}
-      <section className="section bg-white">
+      <section className="section band-sand">
         <div className="container-px">
-          <SectionHeader eyebrow="Erfahrungen" title="Sie vertrauen uns" />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SectionHeader eyebrow="Kundenstimmen" title="Was unsere Kunden sagen" />
+          <div className="grid gap-4 md:grid-cols-2 max-w-4xl mx-auto">
             {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="card p-6">
-                <div className="flex gap-0.5 text-amber-400 mb-3">
+              <figure key={t.name} className="card p-7 flex flex-col">
+                <div className="flex gap-0.5 text-brass mb-4">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} size={16} fill="currentColor" strokeWidth={0} />
+                    <Star key={i} size={14} fill="currentColor" strokeWidth={0} />
                   ))}
                 </div>
-                <p className="text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
-                <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-semibold">{t.name}</p>
-                  <BadgeCheck size={15} className="text-blue" />
-                </div>
-                <p className="text-xs muted">{t.city} &middot; Verifizierter Käufer</p>
-              </div>
+                <blockquote className="text-[0.97rem] leading-relaxed flex-1">{t.text}</blockquote>
+                <figcaption className="mt-5 pt-4 border-t border-line text-sm">
+                  <span className="font-display font-bold">{t.name}</span>
+                  <span className="muted"> · {t.city}</span>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
@@ -442,27 +383,30 @@ export default function HomePage() {
       {/* FAQ */}
       <section className="section">
         <div className="container-px">
-          <SectionHeader eyebrow="FAQ" title="Häufig gestellte Fragen (FAQ)" />
+          <SectionHeader eyebrow="FAQ" title="Häufig gestellte Fragen" />
           <FaqAccordion items={FAQS} />
         </div>
       </section>
 
-      {/* Pre-Footer CTA */}
-      <section className="dark-block section">
-        <div className="container-px text-center">
-          <h2 className="text-3xl md:text-4xl font-bold max-w-2xl mx-auto">
-            Erhalte noch heute Zugang zu HD / 4K Qualität
+      {/* Closing CTA -- the single dark moment on the page */}
+      <section className="band-forest">
+        <div className="container-px py-20 md:py-24 text-center max-w-2xl mx-auto">
+          <h2 className="text-[2rem] md:text-[2.6rem] font-extrabold leading-[1.1] mb-5">
+            Heute Abend schon auf Sendung
           </h2>
-          <p className="text-white/80 mt-4 max-w-xl mx-auto">
-            Sofortige Aktivierung, 24/7 WhatsApp-Support und 7 Tage Geld-zurück-Garantie.
+          <p className="muted text-[1.03rem] leading-relaxed mb-9">
+            Schreib uns auf WhatsApp, wähle dein Paket und erhalte deine
+            Zugangsdaten. In der Regel dauert das keine 15 Minuten — und die
+            ersten 7 Tage sind risikofrei.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="#preise" className="btn-ghost">
-              Preise ansehen
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-on-forest">
+              Abo per WhatsApp starten
+              <ArrowRight size={17} strokeWidth={2} />
             </a>
-            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              WhatsApp-Kontakt
-            </a>
+            <Link href="#preise" className="btn-outline-light">
+              Nochmal die Preise ansehen
+            </Link>
           </div>
         </div>
       </section>

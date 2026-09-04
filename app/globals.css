@@ -1,36 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Sora", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-display: "Manrope", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
 
-  --color-ink: #0f172a;
-  --color-body: #f7f7fb;
-  --color-muted: #64748b;
-  --color-border: #e5e7eb;
+  /* Warm, paper-like neutrals -- deliberately warm (yellow-leaning) rather
+     than the blue-grey neutrals used on the owner's other IPTV sites, so the
+     two never read as the same template with a different hue. */
+  --color-canvas: #faf8f4;
+  --color-surface: #ffffff;
+  --color-sand: #f2eee6;
+  --color-ink: #1a1917;
+  --color-muted: #5b594f;
+  --color-line: #e3ded2;
 
-  /* Navy + orange -- matches the client's reference site direction (photo
-     hero, deep navy sections, orange accent for numbers/bullets/dividers,
-     blue CTA buttons), not the indigo/violet/sky palette used earlier. */
-  --color-navy: #0b2050;
-  --color-navy-2: #142f68;
-  --color-blue: #2563eb;
-  --color-blue-2: #1d4ed8;
-  --color-orange: #f97316;
-  --color-orange-2: #fb923c;
-
-  /* Kept as aliases so existing .dark-block/.gradient-text usages (and any
-     copy-pasted markup still referencing indigo/violet/sky) resolve to the
-     new palette instead of silently breaking. */
-  --color-indigo: var(--color-navy);
-  --color-violet: var(--color-blue);
-  --color-sky: var(--color-orange);
+  /* One deep accent, used sparingly. Bottle green reads premium and calm in
+     the German market and shares no hue family with the navy/orange sites. */
+  --color-forest: #0e4735;
+  --color-forest-2: #14614a;
+  --color-forest-soft: #e8f0ec;
+  --color-brass: #9a7b3f;
 }
 
+/* Tailwind v4 does not generate these from the @theme font tokens. */
 .font-display {
   font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
-.font-mono {
+.font-body {
   font-family: var(--font-body);
 }
 
@@ -38,15 +35,16 @@ html {
   scroll-behavior: smooth;
 }
 
-/* @layer base so these element defaults sit in Tailwind's own layer order
-   (base < components < utilities) -- without this, plain unlayered CSS
-   always wins over layered utility classes regardless of specificity, which
-   silently broke `text-white` on headings anywhere outside .dark-block. */
+/* Base element defaults live in @layer base so Tailwind utilities (text-white
+   and friends) can override them anywhere -- unlayered CSS beats layered
+   utilities regardless of specificity, which silently breaks colour utilities
+   on headings. */
 @layer base {
   body {
-    background: var(--color-body);
+    background: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
   }
 
   h1,
@@ -55,154 +53,224 @@ html {
   h4 {
     font-family: var(--font-display);
     color: var(--color-ink);
+    letter-spacing: -0.02em;
   }
 }
 
-.gradient-text {
-  background: linear-gradient(90deg, var(--color-orange), var(--color-orange-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* ---------- Layout ---------- */
+
+.container-px {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-/* Short 3-stop divider bar under section headings, matching the reference
-   site's blue-white-orange underline accent. */
-.heading-divider {
-  width: 5.5rem;
-  height: 4px;
-  margin: 0.9rem auto 0;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--color-blue), #ffffff, var(--color-orange));
+.section {
+  padding: 6rem 0;
 }
-.dark-block .heading-divider {
-  background: linear-gradient(90deg, var(--color-blue), #ffffff, var(--color-orange));
+@media (max-width: 768px) {
+  .section {
+    padding: 3.75rem 0;
+  }
 }
 
-.btn-primary {
+.hairline-top {
+  border-top: 1px solid var(--color-line);
+}
+
+/* ---------- Type accents ---------- */
+
+.eyebrow {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.9rem 1.75rem;
-  border-radius: 999px;
+  gap: 0.6rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: white;
-  background: linear-gradient(90deg, var(--color-blue-2), var(--color-blue));
-  box-shadow: 0 8px 24px -8px rgb(37 99 235 / 0.5);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-forest);
 }
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px -8px rgb(37 99 235 / 0.6);
-}
-
-.btn-accent {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.9rem 1.75rem;
-  border-radius: 999px;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(90deg, var(--color-orange-2), var(--color-orange));
-  box-shadow: 0 8px 24px -8px rgb(249 115 22 / 0.5);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-.btn-accent:hover {
-  transform: translateY(-2px);
+.eyebrow::before {
+  content: "";
+  width: 1.6rem;
+  height: 1px;
+  background: var(--color-forest);
+  opacity: 0.5;
 }
 
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem 1.7rem;
-  border-radius: 999px;
-  font-weight: 600;
-  color: var(--color-ink);
-  background: white;
-  border: 1px solid var(--color-border);
-  transition: border-color 0.15s ease;
-}
-.btn-ghost:hover {
-  border-color: var(--color-blue);
-}
-
-.glass {
-  background: rgb(255 255 255 / 0.7);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgb(255 255 255 / 0.6);
-  overflow: hidden;
-  position: relative;
-}
-
-.dark-block {
-  background: var(--color-navy);
-  color: white;
-}
-.dark-block .glass {
-  background: rgb(255 255 255 / 0.06);
-  border: 1px solid rgb(255 255 255 / 0.1);
-}
-.dark-block .card {
-  background: var(--color-navy-2);
-  border-color: rgb(255 255 255 / 0.1);
-}
-.dark-block .btn-ghost {
-  background: transparent;
-  color: white;
-  border-color: rgb(255 255 255 / 0.25);
-}
-.dark-block .btn-ghost:hover {
-  border-color: var(--color-orange);
-}
-.dark-block h1,
-.dark-block h2,
-.dark-block h3,
-.dark-block p {
-  color: white;
-}
-.dark-block .muted {
-  color: rgb(255 255 255 / 0.7);
+/* Centre-aligned section headers keep the eyebrow rule symmetric. */
+.eyebrow-center::after {
+  content: "";
+  width: 1.6rem;
+  height: 1px;
+  background: var(--color-forest);
+  opacity: 0.5;
 }
 
 .muted {
   color: var(--color-muted);
 }
 
-.card {
-  background: white;
-  border: 1px solid var(--color-border);
-  border-radius: 1.25rem;
+/* Accent treatment for a key phrase in a heading -- a thin underline rule
+   rather than the gradient-fill text used elsewhere. */
+.marker {
+  color: var(--color-forest);
+  box-shadow: inset 0 -0.28em 0 var(--color-forest-soft);
 }
 
-.section {
-  padding: 5rem 0;
-}
-@media (max-width: 768px) {
-  .section {
-    padding: 3.5rem 0;
-  }
-}
+/* ---------- Buttons: square-ish, hairline, no pills ---------- */
 
-.container-px {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.eyebrow {
-  display: inline-block;
-  font-size: 0.8rem;
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-orange);
-  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: var(--color-forest);
+  border: 1px solid var(--color-forest);
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+.btn-primary:hover {
+  background: var(--color-forest-2);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  transition: border-color 0.15s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--color-ink);
+}
+
+/* On the deep-green band only. */
+.btn-on-forest {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-forest);
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  transition: opacity 0.15s ease;
+}
+.btn-on-forest:hover {
+  opacity: 0.9;
+}
+
+.btn-outline-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  transition: border-color 0.15s ease;
+}
+.btn-outline-light:hover {
+  border-color: #ffffff;
+}
+
+/* ---------- Surfaces ---------- */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+}
+
+/* Floating elements (hero device card) -- one soft, wide shadow, never the
+   stacked coloured glows used on the other sites. */
+.raised {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  box-shadow:
+    0 1px 2px rgb(26 25 23 / 0.04),
+    0 24px 48px -24px rgb(26 25 23 / 0.18);
+}
+
+.band-forest {
+  background: var(--color-forest);
+  color: #ffffff;
+}
+.band-forest h1,
+.band-forest h2,
+.band-forest h3 {
+  color: #ffffff;
+}
+.band-forest .muted {
+  color: rgb(255 255 255 / 0.72);
+}
+.band-forest .eyebrow {
+  color: rgb(255 255 255 / 0.9);
+}
+.band-forest .eyebrow::before,
+.band-forest .eyebrow-center::after {
+  background: rgb(255 255 255 / 0.6);
+}
+
+.band-sand {
+  background: var(--color-sand);
+}
+
+/* ---------- Pricing matrix ---------- */
+
+.matrix {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+}
+.matrix th,
+.matrix td {
+  padding: 0.95rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-line);
+}
+.matrix th:first-child,
+.matrix td:first-child {
+  text-align: left;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.matrix thead th {
+  border-bottom: 1px solid var(--color-line);
+  vertical-align: bottom;
+}
+/* The featured column reads as one continuous panel behind the rows. */
+.matrix .col-featured {
+  background: var(--color-forest-soft);
+}
+.matrix tbody tr:last-child td {
+  border-bottom: none;
 }

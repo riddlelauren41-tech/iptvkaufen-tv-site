@@ -1,61 +1,83 @@
 import type { Metadata } from "next";
-import { MessageCircle, Mail, Clock } from "lucide-react";
+import { MessageCircle, Mail, Clock, ArrowRight } from "lucide-react";
 import { pageMeta, whatsappUrl } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
-  title: "Kontakt | IPTV Kaufen — WhatsApp-Support 7/7",
+  title: "Kontakt | IPTV Kaufen — Support 7 Tage die Woche",
   description:
-    "Kontaktiere IPTV Kaufen über WhatsApp oder E-Mail. Schnelle Antwort, 7 Tage die Woche erreichbar für Fragen und Support.",
+    "Kontaktiere IPTV Kaufen per WhatsApp oder E-Mail. Schnelle Antwort, sieben Tage die Woche, für Fragen vor dem Kauf und Hilfe bei der Einrichtung.",
   path: "/kontakt",
 });
+
+const CHANNELS = [
+  {
+    icon: MessageCircle,
+    title: "WhatsApp",
+    desc: "Der schnellste Weg. Bestellung, Einrichtung und Support laufen hier — meist antworten wir innerhalb weniger Minuten.",
+    action: { label: "Chat öffnen", href: null },
+  },
+  {
+    icon: Mail,
+    title: "E-Mail",
+    desc: "Für ausführlichere Anfragen, Rechnungen oder wenn du lieber schriftlich festhältst. Antwort in der Regel am selben Tag.",
+    action: { label: "info@iptvkaufen-tv.site", href: "mailto:info@iptvkaufen-tv.site" },
+  },
+  {
+    icon: Clock,
+    title: "Erreichbarkeit",
+    desc: "Sieben Tage die Woche, auch abends und am Wochenende — also genau dann, wenn die meisten ihre Geräte einrichten.",
+    action: null,
+  },
+];
 
 export default function KontaktPage() {
   return (
     <>
-      <section className="dark-block section pb-16">
-        <div className="container-px text-center">
-          <span className="eyebrow text-sky">Kontakt</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold max-w-2xl mx-auto">
-            Nimm <span className="gradient-text">Kontakt</span> auf
+      <section className="section pt-14 md:pt-20 pb-12">
+        <div className="container-px max-w-3xl">
+          <span className="eyebrow mb-6">Kontakt</span>
+          <h1 className="text-[2.4rem] md:text-[3.1rem] font-extrabold leading-[1.08] mb-6">
+            Ein Ansprechpartner, <span className="marker">kein Ticketsystem</span>
           </h1>
-          <p className="muted text-lg mt-6 max-w-2xl mx-auto leading-relaxed">
-            Fragen zu deinem Abo, der Installation oder deiner Bestellung? Wir
-            helfen dir gerne weiter, 7 Tage die Woche.
+          <p className="muted text-[1.05rem] leading-relaxed mb-8">
+            Ob Frage vor dem Kauf, Hilfe bei der Einrichtung oder ein Problem mit
+            dem Stream: Du schreibst uns und bekommst eine Antwort von einem
+            Menschen, auf Deutsch.
           </p>
+          <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            WhatsApp-Chat starten
+            <ArrowRight size={17} strokeWidth={2} />
+          </a>
         </div>
       </section>
 
-      <section className="section bg-white">
-        <div className="container-px grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <div className="card p-7 text-center">
-            <div className="mx-auto h-12 w-12 rounded-xl bg-linear-to-br from-indigo to-violet flex items-center justify-center mb-4">
-              <MessageCircle size={22} className="text-white" />
+      <section className="section band-sand">
+        <div className="container-px grid gap-4 md:grid-cols-3 max-w-4xl mx-auto">
+          {CHANNELS.map((c) => (
+            <div key={c.title} className="card p-7 flex flex-col">
+              <c.icon size={20} strokeWidth={1.5} className="text-forest" />
+              <h2 className="font-display font-extrabold text-lg mt-5 mb-2.5">{c.title}</h2>
+              <p className="muted text-sm leading-relaxed flex-1">{c.desc}</p>
+              {c.action && (
+                <div className="mt-6">
+                  {c.action.href ? (
+                    <a href={c.action.href} className="btn-secondary text-sm w-full">
+                      {c.action.label}
+                    </a>
+                  ) : (
+                    <a
+                      href={whatsappUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-secondary text-sm w-full"
+                    >
+                      {c.action.label}
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
-            <h2 className="font-semibold mb-2">WhatsApp</h2>
-            <p className="muted text-sm mb-4">Der schnellste Weg, uns zu erreichen.</p>
-            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-ghost text-sm w-full">
-              Chat starten
-            </a>
-          </div>
-
-          <div className="card p-7 text-center">
-            <div className="mx-auto h-12 w-12 rounded-xl bg-linear-to-br from-indigo to-violet flex items-center justify-center mb-4">
-              <Mail size={22} className="text-white" />
-            </div>
-            <h2 className="font-semibold mb-2">E-Mail</h2>
-            <p className="muted text-sm mb-4">Für ausführlichere Fragen.</p>
-            <a href="mailto:info@iptvkaufen-tv.site" className="btn-ghost text-sm w-full">
-              Schreib uns
-            </a>
-          </div>
-
-          <div className="card p-7 text-center">
-            <div className="mx-auto h-12 w-12 rounded-xl bg-linear-to-br from-indigo to-violet flex items-center justify-center mb-4">
-              <Clock size={22} className="text-white" />
-            </div>
-            <h2 className="font-semibold mb-2">Erreichbarkeit</h2>
-            <p className="muted text-sm">7 Tage die Woche, schnelle Reaktionszeit.</p>
-          </div>
+          ))}
         </div>
       </section>
     </>
